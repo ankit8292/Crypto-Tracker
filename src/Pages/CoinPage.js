@@ -11,13 +11,15 @@ import { CryptoState } from "../CryptoContext";
 const CoinPage = () => {
   const { id } = useParams();
   const [coin, setCoin] = useState();
-
+  const [html, setHtml] =useState('');
   const { currency, symbol } = CryptoState();
 
   const fetchCoin = async () => {
     const { data } = await axios.get(SingleCoin(id));
 
     setCoin(data);
+    setHtml(data?.description.en.split(". ")[0]);
+   // let htmlString=(coin?.description.en.split(". ")[0]);
   };
 
   useEffect(() => {
@@ -81,6 +83,7 @@ const CoinPage = () => {
   if (!coin) return <LinearProgress style={{ backgroundColor: "gold" }} />;
 
   return (
+    
     <div className={classes.container}>
       <div className={classes.sidebar}>
         <img
@@ -93,7 +96,10 @@ const CoinPage = () => {
           {coin?.name}
         </Typography>
         <Typography variant="subtitle1" className={classes.description}>
-          {ReactHtmlParser(coin?.description.en.split(". ")[0])}.
+          
+        {/* This is for HTML parseer */}
+        <div dangerouslySetInnerHTML={{ __html: html }} /> 
+          
         </Typography>
         <div className={classes.marketData}>
           <span style={{ display: "flex" }}>
